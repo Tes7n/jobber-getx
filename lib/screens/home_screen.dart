@@ -1,20 +1,21 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:jobber/models/job.dart';
+import 'package:get/instance_manager.dart';
+import 'package:jobber/controllers/controllers.dart';
+import 'package:jobber/models/job_model.dart';
 import 'package:jobber/utils/utils.dart';
 import 'package:jobber/utils/widgets/job_card.dart';
+import 'package:get/get.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  HomeScreen({Key? key}) : super(key: key);
+  final PostAdController _controller = Get.put(PostAdController());
+  final HistoryController _historycontroller = Get.put(HistoryController());
 
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
+//Todo: Image, UserName, JobcardScreen, Search, filter, chip
+//Todo: bottom navigation controller
+//Todo: extracting widgets to classes
 
-//TODO: Image, UserName, JobcardScreen, Search, filter
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -31,7 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Container(
                 child: Column(
                   children: [
-                    SizedBox(height: 15.h),
+                    SizedBox(
+                      height: 15.h,
+                    ),
                     Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: 15.w,
@@ -74,14 +77,16 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 10.h),
+                    SizedBox(
+                      height: 10.h,
+                    ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 15.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Expanded(
-                            child: CustomSearchBar(),
+                            child: _CustomSearchBar(),
                           ),
                           IconButton(
                             onPressed: () {},
@@ -141,13 +146,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       padding:
                           EdgeInsets.symmetric(horizontal: 5.w, vertical: 8.h),
-                      child: ListView.builder(
-                        itemCount: Job.jobs.length,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return JobCard(job: Job.jobs[index]);
-                        },
+                      child: Obx(
+                        () => ListView.builder(
+                          itemCount: _controller.jobs.length,
+                          shrinkWrap: true,
+                          reverse: false,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return JobCard(job: _controller.jobs[index]);
+                          },
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -199,6 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           EdgeInsets.symmetric(horizontal: 5.w, vertical: 8.h),
                       child: ListView.builder(
                         itemCount: Job.jobs.length,
+                        reverse: false,
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
@@ -216,9 +225,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 15.h),
-            child: Align(
-              alignment: Alignment(0.h, 1.w),
-              child: const CustomNavBar(),
+            child: const Align(
+              alignment: Alignment.bottomCenter,
+              child: _CustomNavBar(),
             ),
           ),
         ],
@@ -227,59 +236,37 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class CustomNavBar extends StatelessWidget {
-  const CustomNavBar({
+class _CustomNavBar extends StatelessWidget {
+  const _CustomNavBar({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.all(
-        Radius.circular(30.r),
-      ),
-      child: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey[400],
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        backgroundColor: BrandColors.mPink.withOpacity(0.9),
-        iconSize: 25.0,
-        onTap: (int index) {},
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home_outlined,
-            ),
-            activeIcon: Icon(
-              Icons.home_rounded,
-            ),
-            label: "HOME",
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.explore_outlined,
-              ),
-              label: "Post"),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.history_outlined,
-              ),
-              label: "History"),
-          BottomNavigationBarItem(
-              icon: Icon(
-                Icons.notifications_outlined,
-              ),
-              label: "Notification"),
-        ],
+    return SafeArea(
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(
+          Radius.circular(30.r),
+        ),
+        child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            selectedItemColor: Colors.black,
+            unselectedItemColor: Colors.grey[400],
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            backgroundColor: BrandColors.mPink.withOpacity(0.9),
+            iconSize: 25.0,
+            onTap: (int index) {
+              Get.toNamed("/${index}");
+            },
+            items: items),
       ),
     );
   }
 }
 
-class CustomSearchBar extends StatelessWidget {
-  const CustomSearchBar({
+class _CustomSearchBar extends StatelessWidget {
+  const _CustomSearchBar({
     Key? key,
   }) : super(key: key);
 
@@ -321,3 +308,30 @@ class CustomSearchBar extends StatelessWidget {
     );
   }
 }
+
+List<BottomNavigationBarItem> items = [
+  const BottomNavigationBarItem(
+    icon: Icon(
+      Icons.home_outlined,
+    ),
+    activeIcon: Icon(
+      Icons.home_rounded,
+    ),
+    label: "/home",
+  ),
+  const BottomNavigationBarItem(
+      icon: Icon(
+        Icons.explore_outlined,
+      ),
+      label: "/postad"),
+  const BottomNavigationBarItem(
+      icon: Icon(
+        Icons.history_outlined,
+      ),
+      label: "/history"),
+  const BottomNavigationBarItem(
+      icon: Icon(
+        Icons.notifications_outlined,
+      ),
+      label: "/notification"),
+];

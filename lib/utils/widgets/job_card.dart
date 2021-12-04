@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:jobber/controllers/controllers.dart';
 import 'package:jobber/models/models.dart';
 import 'package:jobber/utils/brand_colors.dart';
 
 class JobCard extends StatelessWidget {
   final Job job;
+  final HistoryController _controller = Get.find();
 
-  const JobCard({
+  JobCard({
     Key? key,
     required this.job,
   }) : super(key: key);
@@ -106,7 +109,13 @@ class JobCard extends StatelessWidget {
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _controller.applyJob(job);
+                      Get.snackbar("Success", "Job Applied",
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: BrandColors.mgrey.withOpacity(.7),
+                          colorText: Colors.black);
+                    },
                     style: ElevatedButton.styleFrom(
                       primary: BrandColors.mPink,
                       shape: RoundedRectangleBorder(

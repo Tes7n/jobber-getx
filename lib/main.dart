@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:jobber/utils/widgets/job_card.dart';
+import 'package:get/get.dart';
 
 import 'screens/screen.dart';
 
@@ -15,12 +15,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      builder: () => MaterialApp(
+      builder: () => GetMaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: HomeScreen(),
+        getPages: [
+          GetPage(name: '/0', page: () => HomeScreen()),
+          GetPage(name: '/1', page: () => PostAdScreen()),
+          GetPage(name: '/2', page: () => HistoryScreen()),
+          GetPage(name: '/3', page: () => NotificationScreen()),
+        ],
+        initialRoute: '/0',
       ),
       designSize: Size(360, 640),
     );

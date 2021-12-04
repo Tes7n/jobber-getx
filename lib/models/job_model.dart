@@ -4,11 +4,14 @@ class Job extends Equatable {
   final String serviceArea;
   final String fieldOfWork;
   final String serviceName;
+  final String jobtitle;
 
-  Job(
-      {required this.serviceArea,
-      required this.fieldOfWork,
-      required this.serviceName});
+  Job({
+    required this.serviceArea,
+    required this.fieldOfWork,
+    required this.serviceName,
+    this.jobtitle = "Manager",
+  });
 
   static List<Job> jobs = [
     Job(
