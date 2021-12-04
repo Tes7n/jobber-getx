@@ -35,10 +35,15 @@ class JobCard extends StatelessWidget {
                     .headline6!
                     .copyWith(fontWeight: FontWeight.w900),
               ),
+              SizedBox(
+                height: 3.h,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Chip(
+                    visualDensity: VisualDensity(vertical: -4.0),
+                    backgroundColor: BrandColors.mwhite,
                     label: Text(
                       "Full Time",
                       style: Theme.of(context)
@@ -47,7 +52,7 @@ class JobCard extends StatelessWidget {
                           .copyWith(fontSize: 10.sp),
                     ),
                     shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.black, width: 1),
+                      side: const BorderSide(color: Colors.black, width: 1),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),

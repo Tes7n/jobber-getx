@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         ],
         initialRoute: '/0',
       ),
-      designSize: Size(360, 640),
+      designSize: const Size(360, 640),
     );
   }
 }
