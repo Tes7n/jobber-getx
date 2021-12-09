@@ -7,3 +7,4 @@
 3) postad button will push the ad Details entered to the jobs list in home screen.
 4) GetX state management technique is used in the project.
 
+https://www.figma.com/file/xo6GZppl4X9PTSUtFgDvnh/Assignment?node-id=1%3A2
